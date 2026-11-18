@@ -1,0 +1,4 @@
+import {ImageResponse} from "next/og";
+import {getPublicData} from "@/lib/data";
+export const size={width:64,height:64};export const contentType="image/png";
+export default async function Icon(){const {settings}=await getPublicData();if(settings.logo_url){try{const response=await fetch(settings.logo_url,{next:{revalidate:3600}});const bytes=new Uint8Array(await response.arrayBuffer());let binary="";for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));const source=`data:${response.headers.get("content-type")||"image/webp"};base64,${btoa(binary)}`;return new ImageResponse(<img src={source} width="64" height="64" style={{objectFit:"contain"}}/>,size)}catch{}}return new ImageResponse(<div style={{width:64,height:64,display:"flex",alignItems:"center",justifyContent:"center",borderRadius:18,background:"#14543f",color:"#f4cb68",fontSize:42,fontWeight:700}}>अ</div>,size)}
