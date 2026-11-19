@@ -15,4 +15,6 @@ if(user){const changed=await supabase.auth.admin.updateUserById(user.id,{passwor
 else{const created=await supabase.auth.admin.createUser({email,password,email_confirm:true});if(created.error)throw created.error;user=created.data.user}
 const {error}=await supabase.from("site_admins").upsert({user_id:user.id},{onConflict:"user_id"});
 if(error)throw error;
+const allow=await supabase.from("admin_emails").upsert({email,notify:true,added_by:"setup"},{onConflict:"email"});
+if(allow.error)console.warn("Run supabase/migration-admins.sql first to enable the admin email list.");
 console.log(`Owner access is ready for ${email}. Sign in at /admin.`);

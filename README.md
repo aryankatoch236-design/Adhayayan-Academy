@@ -54,3 +54,12 @@ Public content is revalidated about once a minute after a change. Search crawler
 - The 5.0 Justdial rating and 33 ratings are the values supplied for the brief.
 - The map fallback points visitors to Google Maps for the academy address; an embed URL can be set from the admin panel.
 - Set a real production domain in `NEXT_PUBLIC_SITE_URL` before submitting the generated sitemap to search engines.
+
+## Admin team, enquiry emails and videos (added)
+
+1. **Run `supabase/migration-admins.sql`** in the Supabase SQL Editor, then add the first admin with
+   `insert into public.admin_emails(email) values ('you@gmail.com') on conflict do nothing;`
+2. **More admins:** open `/admin` → **Admins**, type an email and press Add. That person signs in at `/admin/login` with **Email me a sign-in link** (no password). In Supabase → Authentication → URL Configuration, add `https://YOUR-SITE/auth/callback` to the redirect URLs.
+3. **Enquiry emails:** add these in Vercel → Environment Variables, then redeploy: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=465`, `SMTP_USER`, `SMTP_PASS` (a Gmail *App Password*), `MAIL_FROM`, and `SUPABASE_SERVICE_ROLE_KEY` (server-only, never `NEXT_PUBLIC_`). Every admin with "Email me enquiries" ticked receives each new enquiry. `NOTIFY_EMAILS` is an optional extra list. If email is not set up, enquiries are still saved.
+4. **Videos:** `/admin` → **Videos**, paste any YouTube link, check the preview, press **Add to website**.
+5. Supabase's built-in sign-in emails are limited to a few per hour. For a team, set a custom SMTP (the same Gmail App Password) in Supabase → Authentication → SMTP Settings.
